@@ -91,13 +91,15 @@ METHODOLOGICAL INFORMATION
 
 
 1. Description of methods used for collection/generation of data: 
-Downloaded TES occurence data from http://ecos.fws.gov/ecp/, then merged with shapefiles from TIGER
+Downloaded TES occurence data from http://ecos.fws.gov/ecp/, then merged with shapefiles from ggplot2 package
+
+note: The Geocarpon species was unnamed, so had to manually name the file as downloaded from the ECOS website.
 
 
 2. Methods for processing the data: <describe how the submitted data were generated from the raw or collected data>
 
 
-3. Instrument- or software-specific information needed to interpret the data: Program R (see footer on programs for specific versions and libraries used)
+3. Instrument- or software-specific information needed to interpret the data: Program R (see footer on output html files for specific versions and libraries used)
 
 
 4. Standards and calibration information, if appropriate: NA
