@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Merge data with county shapefile for TES book maps</title>
+<title>TES book maps</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -201,9 +201,9 @@ hr {
 </head>
 
 <body>
-<h1>Merge data with county shapefile for TES book maps</h1>
+<h1>TES book maps</h1>
 
-<p>Data downloaded from the Environmental Conservation Online System</p>
+<p>TES data downloaded from the Environmental Conservation Online System</p>
 
 <p>County and state shapefiles from ggplot2</p>
 
@@ -212,7 +212,7 @@ hr {
 <pre><code class="r">library(ezknitr)
 library(knitr)
 library(ggplot2) # ggplot2 for mapping
-library(ggmap) # For theme_nothing
+library(ggmap) # For theme_nothing()
 library(dplyr)
 remove(list=ls())
 </code></pre>
@@ -269,6 +269,8 @@ for(ii in 1:length(by.species.list)){
   theme_nothing()
 </code></pre>
 
+<h2>Species maps</h2>
+
 <p>fanshell</p>
 
 <pre><code class="r">p +
@@ -323,25 +325,21 @@ for(ii in 1:length(by.species.list)){
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ggmap_2.6.1   ggplot2_2.1.0 mapdata_2.2-6 maps_3.1.0    dplyr_0.5.0  
-## [6] knitr_1.13    ezknitr_0.4   tigris_0.3.3 
+## [1] maps_3.1.0    ggmap_2.6.1   ggplot2_2.1.0 dplyr_0.5.0   knitr_1.13   
+## [6] ezknitr_0.4  
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5         formatR_1.4         plyr_1.8.4         
-##  [4] R.methodsS3_1.7.1   R.utils_2.3.0       tools_3.3.0        
-##  [7] digest_0.6.9        uuid_0.1-2          evaluate_0.9       
-## [10] tibble_1.1          gtable_0.2.0        lattice_0.20-33    
-## [13] png_0.1-7           DBI_0.4-1           mapproj_1.2-4      
-## [16] rgdal_1.1-10        proto_0.3-10        httr_1.2.1         
-## [19] stringr_1.0.0       RgoogleMaps_1.2.0.7 rgeos_0.3-19       
-## [22] rappdirs_0.3.1      grid_3.3.0          R6_2.1.2           
-## [25] jpeg_0.1-8          foreign_0.8-66      RJSONIO_1.3-0      
-## [28] sp_1.2-3            reshape2_1.4.1      magrittr_1.5       
-## [31] scales_0.4.0        maptools_0.8-39     assertthat_0.1     
-## [34] mime_0.4            geosphere_1.5-5     colorspace_1.2-6   
-## [37] labeling_0.3        stringi_1.1.1       lazyeval_0.2.0     
-## [40] munsell_0.4.3       rjson_0.2.15        markdown_0.7.7     
-## [43] R.oo_1.20.0
+##  [1] Rcpp_0.12.5         magrittr_1.5        munsell_0.4.3      
+##  [4] lattice_0.20-33     colorspace_1.2-6    geosphere_1.5-5    
+##  [7] rjson_0.2.15        R6_2.1.2            jpeg_0.1-8         
+## [10] stringr_1.0.0       plyr_1.8.4          tools_3.3.0        
+## [13] grid_3.3.0          gtable_0.2.0        R.oo_1.20.0        
+## [16] png_0.1-7           DBI_0.4-1           assertthat_0.1     
+## [19] tibble_1.1          RJSONIO_1.3-0       reshape2_1.4.1     
+## [22] mapproj_1.2-4       formatR_1.4         R.utils_2.3.0      
+## [25] evaluate_0.9        labeling_0.3        sp_1.2-3           
+## [28] stringi_1.1.1       RgoogleMaps_1.2.0.7 scales_0.4.0       
+## [31] R.methodsS3_1.7.1   markdown_0.7.7      proto_0.3-10
 </code></pre>
 
 </body>

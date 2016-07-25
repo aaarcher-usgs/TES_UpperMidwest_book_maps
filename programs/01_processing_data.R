@@ -10,7 +10,9 @@ library(dplyr)
 remove(list=ls())
 
 #' ## Download raw data from .csv
-species.list <- c("American Burying beetle", "Canada Lynx", "clubshell",
+#+ downloadCSV
+# Downloaded 20160722
+species.list1 <- c("American Burying beetle", "Canada Lynx", "clubshell",
                   "Copperbelly Water snake", "Curtis pearlymussel",
                   "Dakota Skipper", "eastern Massasauga","fanshell",
                   "Fat pocketbook", "Gray bat", "Grotto Sculpin", "Higgins eye",
@@ -27,14 +29,56 @@ species.list <- c("American Burying beetle", "Canada Lynx", "clubshell",
                   "Snuffbox mussel", "Spectaclecase (mussel)", "Topeka shiner",
                   "Tumbling Creek cavesnail", "White catspaw", "Whooping crane",
                   "Winged Mapleleaf")
+# Downloaded 20160725
+species.list2 <- c("American HartS-Tongue fern", "Arkansas River shiner",
+                   "Black-Footed ferret", "Blowout penstemon", "Cave crayfish",
+                   "Colorado Butterfly", "Decurrent False aster", "Dwarf Lake iris",
+                   "Eastern Prairie Fringed orchid", "Fassetts locoweed",
+                   "Geocarpon", "Gray wolf", "Houghtons goldenrode",
+                   "Illinois Cave amphipod", "Leafy prairie-clover", 
+                   "Lakeside daisy", "Least tern", "Leedys rosefoot",
+                   "Lesser prairie-chicken", "Meads milkweed", 
+                   "Michigan monkey-flower", "Minnesota Dwarf Trout lily",
+                   "Missouri bladderpod", "Northern Wild monkshood", 
+                   "Pitchers thistle", "pondberry", "Prairie bush-clover",
+                   "Prices potato-bean", "Running Buffalo clover", 
+                   "Salt Creek Tiger beetle", "Shorts bladderpod", 
+                   "Small Whorled pogonia", "Ute ladies-tresses",
+                   "Virginia sneezeweed", "Virginia spiraea", 
+                   "Western Prairie Fringed orchid")
+species.list <- c(species.list1, species.list2)
+# Download all from these folders
 path <- "data/downloaded20160722"
 fs <- list.files(path, pattern = glob2rx("*.csv"))
+path.2 <- "data/downloaded20160725"
+fs.2 <- list.files(path.2, pattern = glob2rx("*.csv"))
+
+# Places to store records
 species.each.item <- NULL
 state.each.item <- NULL
 county.each.item <- NULL
 for(ii in fs){
   # Read in raw data table
   fname <- file.path(path, ii) 
+  temp <- read.table(fname, fileEncoding = "UCS-2LE", sep="\t", head=T, quote = "")
+  temp$StateF <- as.character(temp$State)
+  temp$CountyF <- as.character(temp$County)
+  
+  # Determine the species for each table as extracted from table name
+  ii.species <- gsub("\\,.*","",fname)
+  ii.species <- gsub("data/downloaded20160722/US Counties in which the ", "", ii.species)
+  
+  # Species-specific data into a new data.frame
+  assign(ii.species, temp[,3:4])
+  
+  # Record the data in new vectors
+  state.each.item <- c(state.each.item, temp$StateF)
+  county.each.item <- c(county.each.item, temp$CountyF)
+  species.each.item <- c(species.each.item, rep(ii.species, nrow(temp)))
+}
+for(ii in fs.2){
+  # Read in raw data table
+  fname <- file.path(path.2, ii) 
   temp <- read.table(fname, fileEncoding = "UCS-2LE", sep="\t", head=T, quote = "")
   temp$StateF <- as.character(temp$State)
   temp$CountyF <- as.character(temp$County)

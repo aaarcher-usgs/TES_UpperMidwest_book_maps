@@ -215,7 +215,8 @@ remove(list=ls())
 
 <h2>Download raw data from .csv</h2>
 
-<pre><code class="r">species.list &lt;- c(&quot;American Burying beetle&quot;, &quot;Canada Lynx&quot;, &quot;clubshell&quot;,
+<pre><code class="r"># Downloaded 20160722
+species.list1 &lt;- c(&quot;American Burying beetle&quot;, &quot;Canada Lynx&quot;, &quot;clubshell&quot;,
                   &quot;Copperbelly Water snake&quot;, &quot;Curtis pearlymussel&quot;,
                   &quot;Dakota Skipper&quot;, &quot;eastern Massasauga&quot;,&quot;fanshell&quot;,
                   &quot;Fat pocketbook&quot;, &quot;Gray bat&quot;, &quot;Grotto Sculpin&quot;, &quot;Higgins eye&quot;,
@@ -232,14 +233,56 @@ remove(list=ls())
                   &quot;Snuffbox mussel&quot;, &quot;Spectaclecase (mussel)&quot;, &quot;Topeka shiner&quot;,
                   &quot;Tumbling Creek cavesnail&quot;, &quot;White catspaw&quot;, &quot;Whooping crane&quot;,
                   &quot;Winged Mapleleaf&quot;)
+# Downloaded 20160725
+species.list2 &lt;- c(&quot;American HartS-Tongue fern&quot;, &quot;Arkansas River shiner&quot;,
+                   &quot;Black-Footed ferret&quot;, &quot;Blowout penstemon&quot;, &quot;Cave crayfish&quot;,
+                   &quot;Colorado Butterfly&quot;, &quot;Decurrent False aster&quot;, &quot;Dwarf Lake iris&quot;,
+                   &quot;Eastern Prairie Fringed orchid&quot;, &quot;Fassetts locoweed&quot;,
+                   &quot;Geocarpon&quot;, &quot;Gray wolf&quot;, &quot;Houghtons goldenrode&quot;,
+                   &quot;Illinois Cave amphipod&quot;, &quot;Leafy prairie-clover&quot;, 
+                   &quot;Lakeside daisy&quot;, &quot;Least tern&quot;, &quot;Leedys rosefoot&quot;,
+                   &quot;Lesser prairie-chicken&quot;, &quot;Meads milkweed&quot;, 
+                   &quot;Michigan monkey-flower&quot;, &quot;Minnesota Dwarf Trout lily&quot;,
+                   &quot;Missouri bladderpod&quot;, &quot;Northern Wild monkshood&quot;, 
+                   &quot;Pitchers thistle&quot;, &quot;pondberry&quot;, &quot;Prairie bush-clover&quot;,
+                   &quot;Prices potato-bean&quot;, &quot;Running Buffalo clover&quot;, 
+                   &quot;Salt Creek Tiger beetle&quot;, &quot;Shorts bladderpod&quot;, 
+                   &quot;Small Whorled pogonia&quot;, &quot;Ute ladies-tresses&quot;,
+                   &quot;Virginia sneezeweed&quot;, &quot;Virginia spiraea&quot;, 
+                   &quot;Western Prairie Fringed orchid&quot;)
+species.list &lt;- c(species.list1, species.list2)
+# Download all from these folders
 path &lt;- &quot;data/downloaded20160722&quot;
 fs &lt;- list.files(path, pattern = glob2rx(&quot;*.csv&quot;))
+path.2 &lt;- &quot;data/downloaded20160725&quot;
+fs.2 &lt;- list.files(path.2, pattern = glob2rx(&quot;*.csv&quot;))
+
+# Places to store records
 species.each.item &lt;- NULL
 state.each.item &lt;- NULL
 county.each.item &lt;- NULL
 for(ii in fs){
   # Read in raw data table
   fname &lt;- file.path(path, ii) 
+  temp &lt;- read.table(fname, fileEncoding = &quot;UCS-2LE&quot;, sep=&quot;\t&quot;, head=T, quote = &quot;&quot;)
+  temp$StateF &lt;- as.character(temp$State)
+  temp$CountyF &lt;- as.character(temp$County)
+
+  # Determine the species for each table as extracted from table name
+  ii.species &lt;- gsub(&quot;\\,.*&quot;,&quot;&quot;,fname)
+  ii.species &lt;- gsub(&quot;data/downloaded20160722/US Counties in which the &quot;, &quot;&quot;, ii.species)
+
+  # Species-specific data into a new data.frame
+  assign(ii.species, temp[,3:4])
+
+  # Record the data in new vectors
+  state.each.item &lt;- c(state.each.item, temp$StateF)
+  county.each.item &lt;- c(county.each.item, temp$CountyF)
+  species.each.item &lt;- c(species.each.item, rep(ii.species, nrow(temp)))
+}
+for(ii in fs.2){
+  # Read in raw data table
+  fname &lt;- file.path(path.2, ii) 
   temp &lt;- read.table(fname, fileEncoding = &quot;UCS-2LE&quot;, sep=&quot;\t&quot;, head=T, quote = &quot;&quot;)
   temp$StateF &lt;- as.character(temp$State)
   temp$CountyF &lt;- as.character(temp$County)
@@ -266,13 +309,13 @@ summary(all.data)
 </code></pre>
 
 <pre><code>##        State             County                        Species    
-##  Missouri : 628   Washington:  82   Northern long-eared Bat:1803  
-##  Tennessee: 556   Jackson   :  71   Indiana bat            : 949  
-##  Texas    : 443   Jefferson :  70   Red Knot               : 589  
-##  Kentucky : 414   Franklin  :  66   Piping Plover          : 533  
-##  Oklahoma : 366   Madison   :  58   Whooping crane         : 474  
-##  Ohio     : 360   Clay      :  49   Gray bat               : 344  
-##  (Other)  :4486   (Other)   :6857   (Other)                :2561
+##  Missouri : 759   Washington:  90   Northern long-eared Bat:1803  
+##  Tennessee: 601   Jackson   :  89   Indiana bat            : 949  
+##  Texas    : 530   Jefferson :  87   Red Knot               : 589  
+##  Kentucky : 459   Franklin  :  77   Piping Plover          : 533  
+##  Oklahoma : 456   Madison   :  75   Whooping crane         : 474  
+##  Illinois : 454   Lincoln   :  61   Gray bat               : 344  
+##  (Other)  :5730   (Other)   :8510   (Other)                :4297
 </code></pre>
 
 <p>States for mapping</p>
@@ -298,11 +341,11 @@ table(map.data$State)
 
 <pre><code>## 
 ##     Illinois      Indiana         Iowa       Kansas     Michigan 
-##          311          232          208          201          321 
+##          454          244          423          281          406 
 ##    Minnesota     Missouri     Nebraska North Dakota         Ohio 
-##          144          628          274          199          360 
+##          202          759          395          212          387 
 ## South Dakota    Wisconsin 
-##          308          217
+##          354          292
 </code></pre>
 
 <pre><code class="r"># Add FIPS code
@@ -335,21 +378,16 @@ map.data &lt;- left_join(map.data, states)
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ggplot2_2.1.0 mapdata_2.2-6 maps_3.1.0    dplyr_0.5.0   knitr_1.13   
-## [6] ezknitr_0.4   tigris_0.3.3 
+## [1] dplyr_0.5.0 knitr_1.13  ezknitr_0.4
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5       magrittr_1.5      maptools_0.8-39  
-##  [4] rappdirs_0.3.1    munsell_0.4.3     uuid_0.1-2       
-##  [7] colorspace_1.2-6  lattice_0.20-33   R6_2.1.2         
-## [10] plyr_1.8.4        stringr_1.0.0     httr_1.2.1       
-## [13] tools_3.3.0       rgdal_1.1-10      grid_3.3.0       
-## [16] gtable_0.2.0      R.oo_1.20.0       DBI_0.4-1        
-## [19] rgeos_0.3-19      digest_0.6.9      assertthat_0.1   
-## [22] tibble_1.1        formatR_1.4       R.utils_2.3.0    
-## [25] evaluate_0.9      labeling_0.3      sp_1.2-3         
-## [28] stringi_1.1.1     scales_0.4.0      R.methodsS3_1.7.1
-## [31] markdown_0.7.7    foreign_0.8-66
+##  [1] Rcpp_0.12.5       assertthat_0.1    R.methodsS3_1.7.1
+##  [4] grid_3.3.0        plyr_1.8.4        R6_2.1.2         
+##  [7] gtable_0.2.0      DBI_0.4-1         formatR_1.4      
+## [10] magrittr_1.5      evaluate_0.9      scales_0.4.0     
+## [13] ggplot2_2.1.0     stringi_1.1.1     R.oo_1.20.0      
+## [16] R.utils_2.3.0     tools_3.3.0       stringr_1.0.0    
+## [19] munsell_0.4.3     colorspace_1.2-6  tibble_1.1
 </code></pre>
 
 </body>

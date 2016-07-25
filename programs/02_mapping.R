@@ -1,6 +1,6 @@
-#' # Merge data with county shapefile for TES book maps
+#' # TES book maps
 #' 
-#' Data downloaded from the Environmental Conservation Online System
+#' TES data downloaded from the Environmental Conservation Online System
 #' 
 #' County and state shapefiles from ggplot2
 #' 
@@ -9,7 +9,7 @@
 library(ezknitr)
 library(knitr)
 library(ggplot2) # ggplot2 for mapping
-library(ggmap) # For theme_nothing
+library(ggmap) # For theme_nothing()
 library(dplyr)
 remove(list=ls())
 
@@ -50,6 +50,8 @@ p <- ggplot(data=counties.shp)+
   coord_fixed()+
   theme_nothing()
 
+#' ## Species maps 
+#' 
 #' fanshell
 #+ fanshell
 p +
