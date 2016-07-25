@@ -52,7 +52,7 @@ for(ii in fs){
   species.each.item <- c(species.each.item, rep(ii.species, nrow(temp)))
 }
 
-#' Combine all data together
+#' ## Combine all data together
 #+ dataComb
 all.data <- as.data.frame(cbind(state.each.item, county.each.item, species.each.item))
 colnames(all.data) <- c("State", "County", "Species")
@@ -77,7 +77,11 @@ map.data <- droplevels(map.data)
 # View results (number of records per state)
 table(map.data$State)
 # Add FIPS code
-test <- left_join(map.data, states)
+map.data <- left_join(map.data, states)
+
+#' ## Save data
+#+ save data 
+save(map.data, species.list, file = "data/output_data/map_data.R")
 
 #' ### Document Footer
 #' 

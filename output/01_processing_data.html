@@ -209,6 +209,7 @@ hr {
 
 <pre><code class="r">library(ezknitr)
 library(knitr)
+library(dplyr)
 remove(list=ls())
 </code></pre>
 
@@ -257,7 +258,7 @@ for(ii in fs){
 }
 </code></pre>
 
-<p>Combine all data together</p>
+<h2>Combine all data together</h2>
 
 <pre><code class="r">all.data &lt;- as.data.frame(cbind(state.each.item, county.each.item, species.each.item))
 colnames(all.data) &lt;- c(&quot;State&quot;, &quot;County&quot;, &quot;Species&quot;)
@@ -285,10 +286,13 @@ colnames(states) &lt;- &quot;State&quot;
 states$STATEFP &lt;- as.character(c(38, 46, 31, 20, 27, 19, 29, 55, 17, 18, 39, 26))
 </code></pre>
 
-<p>Subset data</p>
+<p>Subset data </p>
 
-<pre><code class="r">map.data &lt;- all.data[all.data$State %in% states$State,]
+<pre><code class="r"># Only data from states that will be mapped
+map.data &lt;- all.data[all.data$State %in% states$State,]
+# Remove factor levels from states not mapped
 map.data &lt;- droplevels(map.data)
+# View results (number of records per state)
 table(map.data$State)
 </code></pre>
 
@@ -299,6 +303,18 @@ table(map.data$State)
 ##          144          628          274          199          360 
 ## South Dakota    Wisconsin 
 ##          308          217
+</code></pre>
+
+<pre><code class="r"># Add FIPS code
+map.data &lt;- left_join(map.data, states)
+</code></pre>
+
+<pre><code>## Joining, by = &quot;State&quot;
+</code></pre>
+
+<h2>Save data</h2>
+
+<pre><code class="r">save(map.data, species.list, file = &quot;data/output_data/map_data.R&quot;)
 </code></pre>
 
 <h3>Document Footer</h3>
@@ -319,18 +335,21 @@ table(map.data$State)
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] knitr_1.13        ezknitr_0.4       magrittr_1.5      tigris_0.3.3.9000
+## [1] ggplot2_2.1.0 mapdata_2.2-6 maps_3.1.0    dplyr_0.5.0   knitr_1.13   
+## [6] ezknitr_0.4   tigris_0.3.3 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] maptools_0.8-39   devtools_1.12.0   rappdirs_0.3.1   
-##  [4] uuid_0.1-2        lattice_0.20-33   R6_2.1.2         
-##  [7] stringr_1.0.0     httr_1.2.1        tools_3.3.0      
-## [10] rgdal_1.1-10      grid_3.3.0        R.oo_1.20.0      
-## [13] git2r_0.15.0      withr_1.0.2       rgeos_0.3-19     
-## [16] digest_0.6.9      formatR_1.4       R.utils_2.3.0    
-## [19] curl_1.0          memoise_1.0.0     evaluate_0.9     
-## [22] sp_1.2-3          stringi_1.1.1     R.methodsS3_1.7.1
-## [25] foreign_0.8-66
+##  [1] Rcpp_0.12.5       magrittr_1.5      maptools_0.8-39  
+##  [4] rappdirs_0.3.1    munsell_0.4.3     uuid_0.1-2       
+##  [7] colorspace_1.2-6  lattice_0.20-33   R6_2.1.2         
+## [10] plyr_1.8.4        stringr_1.0.0     httr_1.2.1       
+## [13] tools_3.3.0       rgdal_1.1-10      grid_3.3.0       
+## [16] gtable_0.2.0      R.oo_1.20.0       DBI_0.4-1        
+## [19] rgeos_0.3-19      digest_0.6.9      assertthat_0.1   
+## [22] tibble_1.1        formatR_1.4       R.utils_2.3.0    
+## [25] evaluate_0.9      labeling_0.3      sp_1.2-3         
+## [28] stringi_1.1.1     scales_0.4.0      R.methodsS3_1.7.1
+## [31] markdown_0.7.7    foreign_0.8-66
 </code></pre>
 
 </body>
